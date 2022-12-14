@@ -7,9 +7,13 @@ IP_MASTER=${IP_MASTER:-}
 ENDIP=$(ip addr show eth0 | grep 'inet ' | sed -E 's/\s+inet ([0-9.]+)\/[0-9]+ .*/\1/g' | head -n 1 | sed -E 's/^([0-9].+)([0-9]+)$/\2/g')
 MYSQL_SLAVE_PASSWORD=${MYSQL_SLAVE_PASSWORD:-slave}
 
+# Input IP master change "dig +short master"
 if [ -z $IP_MASTER ]; then
   IP_MASTER=$(dig +short master)
 fi
+
+# If use docker run mysql no need use service mysql start
+#service mysql start
 
 while :; 
 do
