@@ -4,7 +4,8 @@ set -ex
 
 
 IP_MASTER=${IP_MASTER:-}
-ENDIP=$(ip addr show eth0 | grep 'inet ' | sed -E 's/\s+inet ([0-9.]+)\/[0-9]+ .*/\1/g' | head -n 1 | sed -E 's/^([0-9].+)([0-9]+)$/\2/g')
+NAME_NET=$(ip route list | grep 'default' | grep -Eo 'dev [a-z0-9]+' | awk '{print $2}')
+ENDIP=$(ip addr show $NAME_NET | grep 'inet ' | sed -E 's/\s+inet ([0-9.]+)\/[0-9]+ .*/\1/g' | head -n 1 | sed -E 's/^([0-9].+)([{.}])([0-9]+)$/\3/g')
 MYSQL_SLAVE_PASSWORD=${MYSQL_SLAVE_PASSWORD:-slave}
 
 # Input IP master change "dig +short master"

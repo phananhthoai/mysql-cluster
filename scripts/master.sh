@@ -19,6 +19,8 @@ do
 done
 
 echo "CREATE USER root@\"%\" IDENTIFIED BY \"$MYSQL_ROOT_PASSWORD\"" | sudo mysql
+echo "GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\"" | sudo mysql;
+echo "FLUSH PRIVILEGES;" | sudo mysql
 
 if [ -z $(echo 'select Host from mysql.user where User="slave"' | sudo mysql) ]; then
   echo "CREATE USER \"slave\"@\"%\" IDENTIFIED BY \"$MYSQL_SLAVE_PASSWORD\"" | sudo mysql
