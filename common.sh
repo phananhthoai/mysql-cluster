@@ -4,7 +4,7 @@ set -ex
 # Turn on export DEBIAN_FRONTEND=noninteractive if docker run mysql
 #export DEBIAN_FRONTEND=noninteractive
 
-#sudo apt update
+sudo apt update
 
 sudo apt install -y systemd systemd-sysv kmod coreutils lsb-release wget curl zip unzip tar busybox iputils-ping iproute2 net-tools jq gnupg2 netcat bind9-dnsutils openssh-client git binutils ripgrep bash-completion
 
