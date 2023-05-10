@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
-
+if [ $(id -u) != 0 ]; then
+  sudo ${0}
+  exit 0
+fi
 
 IP_MASTER=${IP_MASTER:-}
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
@@ -15,7 +18,7 @@ if [ -z $IP_MASTER ]; then
 fi
 
 # If use docker run mysql no need use service mysql start
-#service mysql start
+service mysql start
 
 while :; 
 do
@@ -42,9 +45,9 @@ done
 printf 'CHANGE MASTER TO MASTER_HOST="%s",MASTER_USER="%s", MASTER_PASSWORD="%s"' ${IP_MASTER} slave ${MYSQL_SLAVE_PASSWORD} | mysql
 sed -i -E "s/^#server-id += [0-9]$/server-id          =$ENDIP/g" /etc/mysql/mariadb.conf.d/50-server.cnf
 
-echo "CREATE USER root@\"%\" IDENTIFIED BY \"$MYSQL_ROOT_PASSWORD\"" | sudo mysql
-echo "GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\"" | sudo mysql;
-echo "FLUSH PRIVILEGES;" | sudo mysql
+echo "CREATE USER root@\"%\" IDENTIFIED BY \"$MYSQL_ROOT_PASSWORD\"" | mysql
+echo "GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\"" | mysql;
+echo "FLUSH PRIVILEGES;" | mysql
 service mysql restart
 
 echo "START SLAVE" | mysql
