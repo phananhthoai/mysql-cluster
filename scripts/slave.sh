@@ -14,7 +14,7 @@ MYSQL_SLAVE_PASSWORD=${MYSQL_SLAVE_PASSWORD:-slave}
 
 # Input IP master change "dig +short master"
 if [ -z $IP_MASTER ]; then
-  IP_MASTER=$(dig +short master)
+  IP_MASTER=192.168.2.51
 fi
 
 # If use docker run mysql no need use service mysql start
@@ -45,10 +45,10 @@ done
 printf 'CHANGE MASTER TO MASTER_HOST="%s",MASTER_USER="%s", MASTER_PASSWORD="%s"' ${IP_MASTER} slave ${MYSQL_SLAVE_PASSWORD} | mysql
 sed -i -E "s/^#server-id += [0-9]$/server-id          =$ENDIP/g" /etc/mysql/mariadb.conf.d/50-server.cnf
 
-echo "CREATE USER root@\"%\" IDENTIFIED BY \"$MYSQL_ROOT_PASSWORD\"" | mysql
-echo "GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\"" | mysql;
+echo "CREATE USER root@\"%\" IDENTIFIED BY \"$MYSQL_ROOT_PASSWORD\";" | mysql
+echo "GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;" | mysql
 echo "FLUSH PRIVILEGES;" | mysql
 service mysql restart
 
-echo "START SLAVE" | mysql
-echo "SHOW SLAVE STATUS\G" | mysql
+echo "START SLAVE" | mysql -uroot -proot
+echo "SHOW SLAVE STATUS\G" | mysql -uroot -proot
