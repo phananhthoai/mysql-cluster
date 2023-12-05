@@ -24,13 +24,13 @@ do
   fi
 done
 
-echo "CREATE USER root@\"%\" IDENTIFIED BY \"$MYSQL_ROOT_PASSWORD\"" | mysql
-echo "GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\"" | mysql;
+echo "CREATE USER root@\"%\" IDENTIFIED BY \"$MYSQL_ROOT_PASSWORD\";" | mysql
+echo "GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;" | mysql
 echo "FLUSH PRIVILEGES;" | mysql
 
 if [ -z $(echo 'select Host from mysql.user where User="slave"' | mysql) ]; then
-  echo "CREATE USER \"slave\"@\"%\" IDENTIFIED BY \"$MYSQL_SLAVE_PASSWORD\"" | mysql
-  echo "GRANT REPLICATION SLAVE ON *.* TO \"slave\"@\"%\"" | mysql
+  echo "CREATE USER \"slave\"@\"%\" IDENTIFIED BY \"$MYSQL_SLAVE_PASSWORD\";" | mysql
+  echo "GRANT REPLICATION SLAVE ON *.* TO \"slave\"@\"%\" WITH GRANT OPTION;" | mysql
   echo "FLUSH PRIVILEGES;" | mysql
 fi
 
